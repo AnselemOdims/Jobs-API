@@ -7,9 +7,7 @@ const authMiddleWare = async (req, res, next) => {
   if (!auth || !auth.startsWith('Bearer ')) {
     throw unAuthorizedError('Unauthorized user');
   }
-
   const token = auth.split(' ')[1];
-
   try {
     const verifiedUser = await jwt.verify(token, process.env.JWT_SECRET);
     req.user = {
