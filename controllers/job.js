@@ -1,18 +1,16 @@
 const Job = require('../model/Job');
 const { StatusCodes } = require('http-status-codes');
-const {notFoundError} = require('../utils/CustomError')
+const { notFoundError, badRequestError } = require('../utils/CustomError');
 
 const getAllJobs = async (req, res) => {
   const { id } = req.user;
   const jobs = await Job.find({ createdBy: id });
-  res
-    .status(StatusCodes.OK)
-    .json({
-      code: '00',
-      message: 'All jobs retrieved successfully',
-      data: jobs,
-      length: jobs.length,
-    });
+  res.status(StatusCodes.OK).json({
+    code: '00',
+    message: 'All jobs retrieved successfully',
+    data: jobs,
+    length: jobs.length,
+  });
 };
 
 const getJob = async (req, res) => {
@@ -20,15 +18,15 @@ const getJob = async (req, res) => {
   const { id: jobId } = req.params;
   const job = await Job.findOne({
     _id: jobId,
-    createdBy: id
-  })
-  if(!job) {
-    throw notFoundError(`No job with id ${jobId}`)
+    createdBy: id,
+  });
+  if (!job) {
+    throw notFoundError(`No job with id ${jobId}`);
   }
   res.status(StatusCodes.OK).json({
     code: '00',
     message: 'Job retrieved successfully',
-    data: job
+    data: job,
   });
 };
 
@@ -47,8 +45,25 @@ const createJob = async (req, res) => {
   });
 };
 
-const updateJob = () => {
-  res.send('Update Job');
+const updateJob = async (req, res) => {
+  const {
+    body: { company, position },
+    user: { id },
+    params: { id: jobId },
+  } = req;
+  if (!company || !position) {
+    throw badRequestError('Company and Position can not be empty');
+  }
+  const job = await Job.findByIdAndUpdate(
+    { _id: jobId, createdBy: id },
+    req.body,
+    { new: true, runValidators: true }
+  );
+  res.status(StatusCodes.OK).json({
+    code: '00',
+    message: 'Job updated successfully!',
+    data: job
+  });
 };
 
 const deleteJob = () => {
