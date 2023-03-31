@@ -20,7 +20,12 @@ const errorHandler = (err, req, res, next) => {
         statusCode: 400
     }
   }
-//   res.status(500).json({ err })
+  if(err.name === 'CastError') {
+    customError = {
+        message: `No item with id ${err.value} found`,
+        statusCode: 404
+    }
+  }
   res
     .status(customError.statusCode)
     .json({ code: '99', message: customError.message });
