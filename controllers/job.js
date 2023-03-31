@@ -2,7 +2,16 @@ const Job = require('../model/Job');
 const { StatusCodes } = require('http-status-codes');
 
 const getAllJobs = async (req, res) => {
- 
+  const { id } = req.user;
+  const jobs = await Job.find({ createdBy: id });
+  res
+    .status(StatusCodes.OK)
+    .json({
+      code: '00',
+      message: 'All jobs retrieved successfully',
+      data: jobs,
+      length: jobs.length,
+    });
 };
 
 const getJob = () => {
