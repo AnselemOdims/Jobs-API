@@ -1,5 +1,6 @@
 const Job = require('../model/Job');
 const { StatusCodes } = require('http-status-codes');
+const {notFoundError} = require('../utils/CustomError')
 
 const getAllJobs = async (req, res) => {
   const { id } = req.user;
@@ -14,8 +15,21 @@ const getAllJobs = async (req, res) => {
     });
 };
 
-const getJob = () => {
-  res.send('Get a single job');
+const getJob = async (req, res) => {
+  const { id } = req.user;
+  const { id: jobId } = req.params;
+  const job = await Job.findOne({
+    _id: jobId,
+    createdBy: id
+  })
+  if(!job) {
+    throw notFoundError(`No job with id ${jobId}`)
+  }
+  res.status(StatusCodes.OK).json({
+    code: '00',
+    message: 'Job retrieved successfully',
+    data: job
+  });
 };
 
 const createJob = async (req, res) => {

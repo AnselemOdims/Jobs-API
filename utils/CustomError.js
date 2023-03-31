@@ -14,6 +14,11 @@ class CustomError extends Error {
         this.statusCode = StatusCodes.UNAUTHORIZED;
         return this
     }
+
+    notFound = () => {
+        this.statusCode = StatusCodes.NOT_FOUND;
+        return this
+    }
 }
 
 const createCustomError = (msg) => {
@@ -22,10 +27,12 @@ const createCustomError = (msg) => {
 
 const badRequestError = (msg) => createCustomError(msg).badRequest()
 const unAuthorizedError = (msg) => createCustomError(msg).unAuthorized()
+const notFoundError = (msg) => createCustomError(msg).notFound()
 
 module.exports = {
     createCustomError,
     CustomError, 
     badRequestError,
-    unAuthorizedError
+    unAuthorizedError,
+    notFoundError
 }
