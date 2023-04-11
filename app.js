@@ -1,5 +1,9 @@
 const express = require('express');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const cors = require('cors')
+const helmet = require('helmet')
+const xss = require('xss-clean')
+const path = require('path')
 
 require('dotenv').config()
 require('express-async-errors');
@@ -11,9 +15,18 @@ const authMiddleWare = require('./middleware/authMiddleware')
 
 const app = express();
 
+app.use(cors())
+app.use(helmet())
+app.use(xss())
+
 app.use(express.json());
+
+app.use(express.static(path.resolve(__dirname, './client/build')))
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/jobs', authMiddleWare, jobRouter);
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, './client/build', 'index.html'))
+})
 app.use(errorHandler)
 
 const connectDB = async() => {
