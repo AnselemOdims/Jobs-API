@@ -47,3 +47,7 @@ const start = async () => {
 }
 
 start();
+
+module.exports = {
+    connectDB
+}

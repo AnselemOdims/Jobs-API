@@ -10,10 +10,12 @@ const authMiddleWare = async (req, res, next) => {
   const token = auth.split(' ')[1];
   try {
     const verifiedUser = await jwt.verify(token, process.env.JWT_SECRET);
+    const testUser = verifiedUser.userId === '6436945189b28063dcdeed3a';
     req.user = {
       id: verifiedUser.userId,
       name: verifiedUser.name,
       email: verifiedUser.email,
+      testUser
     };
     next();
   } catch (err) {

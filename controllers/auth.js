@@ -12,12 +12,12 @@ const login = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw unAuthorizedError('Unauthorized user');
+    throw unAuthorizedError('Email/Password incorrect');
   }
   const isPassword = await user.comparePassword(password);
   console.log(isPassword)
   if (!isPassword) {
-    throw unAuthorizedError('Unauthorized user');
+    throw unAuthorizedError('Email/Password incorrect');
   }
   const token = user.generateToken();
   res.status(StatusCodes.OK).json({
@@ -51,7 +51,8 @@ const register = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { email, name, lastName, location} = req.body;
-  const { id } = req.user;
+  const { id, testUser } = req.user;
+  if(testUser) return res.send('User  can not perform operation')
   if(!email || !name || !lastName || !location) {
     throw badRequestError('Please provide all fields')
   }
