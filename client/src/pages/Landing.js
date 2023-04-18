@@ -8,22 +8,21 @@ const Landing = () => {
       <nav>
         <Logo />
       </nav>
-      <div className='container page'>
+      <div className="container page">
         {/* info */}
-        <div className='info'>
+        <div className="info">
           <h1>
             job <span>tracking</span> app
           </h1>
           <p>
-            Crucifix narwhal street art asymmetrical, humblebrag tote bag pop-up
-            fixie raclette taxidermy craft beer. Brunch bitters synth, VHS
-            crucifix heirloom meggings bicycle rights.
+            Never Miss a Career Opportunity: Keep track of job applications and
+            hiring progress with our job tracking website.
           </p>
-          <Link to='/register' className='btn btn-hero'>
+          <Link to="/register" className="btn btn-hero">
             Login/Register
           </Link>
         </div>
-        <img src={main} alt='job hunt' className='img main-img' />
+        <img src={main} alt="job hunt" className="img main-img" />
       </div>
     </Wrapper>
   );
